@@ -51,9 +51,11 @@ if __name__ == '__main__':
     file_extentions = [".jpeg", ".jpg", ".xbm", ".bmp", ".png", ".JPG"]
 
     # define file path
-    root_path = "E:\Wall Paper"  # default root path is "./"
+    root_path = input("Enter your folder path: \n")  # default root path is "./"
     destination_path = ".\out_put"
 
     # make object of copyfile class
     cp = CopyFile(file_extentions, destination_path, root_path)
-    cp.copy()  # copy file from source path to destination path
+
+    # copy file from source path to destination path
+    cp.copy()  
