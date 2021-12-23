@@ -68,7 +68,7 @@ class CopyFile:
 
                 copyfile(file_path, destination_path)
 
-            print("\n[SUCCESS] All files are copied successfully")
+            print("\n[SUCCESS] All files are copied successfully\n")
 
             return
 
