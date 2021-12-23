@@ -1,6 +1,8 @@
 import os
 from shutil import copyfile
 from tqdm import tqdm
+import time
+
 
 
 class CopyFile:
@@ -14,7 +16,27 @@ class CopyFile:
     def main(self):
 
         try:
-            print("Main function clled now...")
+            print("\n>>> Bellow file extension are available: ")
+            while True:
+                print("\n")
+                for i, ext in enumerate(self.file_extentions):
+                    print(f"[{i}] {ext}")
+
+                user_response = input(
+                    "\n[INFO] press 'a' key to add custom file extensions.\n[INFO] press 'ENTER' key to continue \n\n>>> ")
+
+                if user_response == "":
+                    break
+
+                elif user_response == "a":
+                    custom_ext = input("\nEnter file extension like '.jpg' :\n\n>>> ")
+                    if custom_ext == "":
+                        break
+                    if custom_ext not in self.file_extentions:
+                        self.file_extentions.append(custom_ext)
+                    else:
+                        print("\n[INFO] extension is already exist")
+
             file_path_list = []
             for extension in self.file_extentions:
                 for dirpath, dirnames, filenames in os.walk(self.file_path):
@@ -28,16 +50,25 @@ class CopyFile:
     def copy(self):
 
         try:
-            print("copyfile function called now...")
             if not os.path.exists(self.dest_file_path):
                 os.mkdir(self.dest_file_path)
 
             for file_path in tqdm(self.source_file_path, desc="File copy", total=len(self.source_file_path)):
-                destination_path = os.path.join(
-                    self.dest_file_path, file_path.split("\\")[-1])
+
+                file_type = file_path.split("\\")[-1].split(".")[-1]
+                destination_folder =  os.path.join(self.dest_file_path, file_type)
+
+                if not os.path.exists(destination_folder):
+                    os.makedirs(destination_folder)
+                    destination_path = os.path.join(
+                    destination_folder, file_path.split("\\")[-1])
+                else:
+                    destination_path = os.path.join(
+                    destination_folder, file_path.split("\\")[-1])
+
                 copyfile(file_path, destination_path)
 
-            print("All files are copied successfully")
+            print("\n[SUCCESS] All files are copied successfully")
 
             return
 
@@ -50,12 +81,15 @@ if __name__ == '__main__':
     # taget file extension
     file_extentions = [".jpeg", ".jpg", ".xbm", ".bmp", ".png", ".JPG"]
 
-    # define file path
-    root_path = input("Enter your folder path: \n")  # default root path is "./"
-    destination_path = ".\out_put"
+    root_path = input("\n[OPTIONAL] Enter your target folder path: \n\n>>> ")
+    destination_path = input("\n[OPTIONAL] Enter your destination folder folder path: \n\n>>> ")
+
+    if root_path == "":
+        root_path = "./"
+    elif destination_path == "":
+        destination_path = ".\out_put"
 
     # make object of copyfile class
     cp = CopyFile(file_extentions, destination_path, root_path)
-
     # copy file from source path to destination path
-    cp.copy()  
+    cp.copy()
